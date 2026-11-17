@@ -1,0 +1,5 @@
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+# Preserve downloaded source snapshots byte for byte, including original whitespace.
+reference/** -whitespace

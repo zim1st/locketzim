@@ -1,0 +1,22 @@
+{
+  "version": "3.0.0",
+  "videoSeconds": 120,
+  "files": {
+    "scripts/remote-config.js": {
+      "bytes": 12411,
+      "sha256": "13d203d5aaddaed34a5a4728b8660860a3ca5b972f9ce17d7ac3e3628bb3cb93"
+    },
+    "scripts/revenuecat.js": {
+      "bytes": 3571,
+      "sha256": "41b89bdaed96b7d81ea0cb4042e6a4347c39f7edf54b29684898cc62fb557995"
+    },
+    "LocketZim.module": {
+      "bytes": 1380,
+      "sha256": "0fb9a5521c2a3868364639540047e9f2e490c0c800686dfbc89bb348e69cab2b"
+    },
+    "LocketZim.local.module": {
+      "bytes": 1156,
+      "sha256": "a80c5206db48524e5382c2a25c111432e108b8b64c98777137f0fa13f007fe60"
+    }
+  }
+}

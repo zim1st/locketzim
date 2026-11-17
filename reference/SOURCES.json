@@ -1,0 +1,139 @@
+{
+  "files": [
+    {
+      "path": "reference/vuong2023/Locket_Ohoang7.js",
+      "url": "https://raw.githubusercontent.com/vuong2023/shad/main/js/Locket_Ohoang7.js",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 1298,
+      "sha256": "c35e146fdba58b4cc6f27604925a2ac7a8f80f4f9befef165fd662ed142898e2",
+      "usedByActiveModule": false
+    },
+    {
+      "path": "reference/vuong2023/deleteHeader.js",
+      "url": "https://raw.githubusercontent.com/vuong2023/shad/main/js/deleteHeader.js",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 354,
+      "sha256": "377ef001fedb875360c5537e367be79188ad79b22b2dbd0980dd8e7dcb04069a",
+      "usedByActiveModule": false
+    },
+    {
+      "path": "reference/Xwuan19/shadowrocket/assets/frames/frame_citopia_y2k.png",
+      "url": "https://raw.githubusercontent.com/Xwuan19/locket-gold-hub/main/shadowrocket/assets/frames/frame_citopia_y2k.png",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 52794,
+      "sha256": "bb078c1b1091599eb9d5c5e914e60019c3bad303028d97a867c4bed3e7d1c451",
+      "usedByActiveModule": false
+    },
+    {
+      "path": "reference/Xwuan19/shadowrocket/assets/frames/frame_kitty_shinchan.png",
+      "url": "https://raw.githubusercontent.com/Xwuan19/locket-gold-hub/main/shadowrocket/assets/frames/frame_kitty_shinchan.png",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 40274,
+      "sha256": "78f8f91ad6f903db74c9f9a54c555930c3b760026b6777874ec48e70033b7fd5",
+      "usedByActiveModule": false
+    },
+    {
+      "path": "reference/Xwuan19/shadowrocket/assets/frames/frame_lowg_l2k.png",
+      "url": "https://raw.githubusercontent.com/Xwuan19/locket-gold-hub/main/shadowrocket/assets/frames/frame_lowg_l2k.png",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 45504,
+      "sha256": "acb437f4d0d19bfa1fb20c7391b42064c56f2a1f1083a632d5bf2cc771b91ee5",
+      "usedByActiveModule": false
+    },
+    {
+      "path": "reference/Xwuan19/shadowrocket/assets/frames/frame_royal_gold.png",
+      "url": "https://raw.githubusercontent.com/Xwuan19/locket-gold-hub/main/shadowrocket/assets/frames/frame_royal_gold.png",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 294938,
+      "sha256": "bc0eaccfa005614127408461647ab032bdccc2b88b3a4f9e0a01c0a639b17efc",
+      "usedByActiveModule": false
+    },
+    {
+      "path": "reference/Xwuan19/shadowrocket/assets/locket_gold.jpg",
+      "url": "https://raw.githubusercontent.com/Xwuan19/locket-gold-hub/main/shadowrocket/assets/locket_gold.jpg",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 341539,
+      "sha256": "f91b7aec1a4774904787bd7fe02422b652f6bdf90d53417505662568090648b0",
+      "usedByActiveModule": false
+    },
+    {
+      "path": "reference/Xwuan19/shadowrocket/js/locket_filter_response.js",
+      "url": "https://raw.githubusercontent.com/Xwuan19/locket-gold-hub/main/shadowrocket/js/locket_filter_response.js",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 4977,
+      "sha256": "659f56fb179cae3b9a746df78fcc8ae4bd7890cfc7b590a735753221437dc390",
+      "usedByActiveModule": false
+    },
+    {
+      "path": "reference/Xwuan19/shadowrocket/js/locket_firebase_request.js",
+      "url": "https://raw.githubusercontent.com/Xwuan19/locket-gold-hub/main/shadowrocket/js/locket_firebase_request.js",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 781,
+      "sha256": "a16ea482c891f5bd716c53659e544c512d9252e1397ffbdf48e182ddd8726c12",
+      "usedByActiveModule": false
+    },
+    {
+      "path": "reference/Xwuan19/shadowrocket/js/locket_firebase_response.js",
+      "url": "https://raw.githubusercontent.com/Xwuan19/locket-gold-hub/main/shadowrocket/js/locket_firebase_response.js",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 300472,
+      "sha256": "0551b7ec95b475790ad784850e714e611a76f06f0dc83f611b74a24f7c588e3e",
+      "usedByActiveModule": false
+    },
+    {
+      "path": "reference/Xwuan19/shadowrocket/js/locket_pb_req.js",
+      "url": "https://raw.githubusercontent.com/Xwuan19/locket-gold-hub/main/shadowrocket/js/locket_pb_req.js",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 63091,
+      "sha256": "da0e4325201e0529cab524ecb06cfba03f404caafb5d074f838e4db73f4d885d",
+      "usedByActiveModule": false
+    },
+    {
+      "path": "reference/Xwuan19/shadowrocket/js/locket_photobooth.js",
+      "url": "https://raw.githubusercontent.com/Xwuan19/locket-gold-hub/main/shadowrocket/js/locket_photobooth.js",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 2229,
+      "sha256": "cfe8faa3473617036bd688938f66ef6fd3f1991ab3ab4f11948a614b9d6e9062",
+      "usedByActiveModule": false
+    },
+    {
+      "path": "reference/Xwuan19/shadowrocket/js/locket_revenuecat_request.js",
+      "url": "https://raw.githubusercontent.com/Xwuan19/locket-gold-hub/main/shadowrocket/js/locket_revenuecat_request.js",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 383,
+      "sha256": "64cc9eac3dcaaaae12dd04ac2577e31e8ef3baccd85c2c6739f7a5e63be231dc",
+      "usedByActiveModule": false
+    },
+    {
+      "path": "reference/Xwuan19/shadowrocket/js/locket_revenuecat_response.js",
+      "url": "https://raw.githubusercontent.com/Xwuan19/locket-gold-hub/main/shadowrocket/js/locket_revenuecat_response.js",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 2050,
+      "sha256": "87c421751bbe3fda358a34e4ca1f51d742fae43622fa3fc6b073b796d5994243",
+      "usedByActiveModule": false
+    },
+    {
+      "path": "reference/Xwuan19/shadowrocket/modules/Locket_VIP.module",
+      "url": "https://raw.githubusercontent.com/Xwuan19/locket-gold-hub/main/shadowrocket/modules/Locket_VIP.module",
+      "retrievedDate": "2026-11-17",
+      "httpStatus": 200,
+      "bytes": 4336,
+      "sha256": "e9196909158adb9a9c1b06e4047d3e84e837f200e6d764096ce748450ae0be4e",
+      "usedByActiveModule": false
+    }
+  ]
+}

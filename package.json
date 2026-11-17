@@ -1,0 +1,13 @@
+{
+  "name": "locketzim",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Self-contained Shadowrocket scripts for zim1st/locketzim",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node tools/build.mjs && node --test tests/*.test.mjs && node tools/audit.mjs"
+  }
+}
