@@ -1,6 +1,6 @@
 {
   "name": "locketzim",
-  "version": "4.0.0",
+  "version": "4.0.1-recovery",
   "private": true,
   "description": "Self-contained Shadowrocket scripts for zim1st/locketzim",
   "type": "module",

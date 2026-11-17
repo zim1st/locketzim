@@ -1,0 +1,12 @@
+#!name=Locket Zim - Khoi phuc Gold
+#!desc=Recovery: original Gold hooks only. No Firebase, filter or audio overrides.
+#!category=Locket Zim
+# Original authors: Vuong2023 / Ohoang7. Exact source snapshots; see recovery/README.md.
+# Enable on a profile with its own trusted HTTPS certificate. Disable other Locket modules.
+
+[Script]
+revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts$|subscribers\/[^/]+$), script-path=https://raw.githubusercontent.com/zim1st/locketzim/main/scripts/recovery-response-c35e146fdba5.js, requires-body=true, max-size=-1, timeout=60
+deleteHeader = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts|subscribers), script-path=https://raw.githubusercontent.com/zim1st/locketzim/main/scripts/recovery-request-377ef001fedb.js, timeout=60
+
+[MITM]
+hostname = %APPEND% api.revenuecat.com

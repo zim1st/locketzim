@@ -6,8 +6,11 @@ import { createHash } from 'node:crypto';
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const firebasePattern = String.raw`^https:\/\/firebaseremoteconfig\.googleapis\.com\/v1\/projects\/locket-4252a\/namespaces\/[^/?]+:fetch(?:\?|$)`;
 export const revenuecatPattern = String.raw`^https:\/\/api\.revenuecat\.com\/v1\/(?:receipts|subscribers\/[^/?]+)(?:\?|$)`;
+export const recoveryResponsePattern = String.raw`^https:\/\/api\.revenuecat\.com\/.+\/(receipts$|subscribers\/[^/]+$)`;
+export const recoveryRequestPattern = String.raw`^https:\/\/api\.revenuecat\.com\/.+\/(receipts|subscribers)`;
 
 export function validateSettings(settings) {
+  if (!['recovery', 'experimental'].includes(settings.profile)) throw new Error('profile must be recovery or experimental');
   if (!Number.isInteger(settings.videoSeconds) || settings.videoSeconds < 1 || settings.videoSeconds > 120) {
     throw new Error('videoSeconds must be an integer from 1 to 120. Device/server support is separate.');
   }
@@ -20,11 +23,28 @@ export function validateSettings(settings) {
   return settings;
 }
 
-export function makeModule(base = '', filenames = {}) {
+export function makeModule(base = '', filenames = {}, profile = 'experimental') {
   const script = name => {
     const filename = filenames[name] || `${name}.js`;
     return base ? `${base}/scripts/${filename}` : `scripts/${filename}`;
   };
+  if (profile === 'recovery') {
+    return [
+      '#!name=Locket Zim - Khoi phuc Gold',
+      '#!desc=Recovery: original Gold hooks only. No Firebase, filter or audio overrides.',
+      '#!category=Locket Zim',
+      '# Original authors: Vuong2023 / Ohoang7. Exact source snapshots; see recovery/README.md.',
+      '# Enable on a profile with its own trusted HTTPS certificate. Disable other Locket modules.',
+      '',
+      '[Script]',
+      `revenuecat = type=http-response, pattern=${recoveryResponsePattern}, script-path=${script('recovery-response')}, requires-body=true, max-size=-1, timeout=60`,
+      `deleteHeader = type=http-request, pattern=${recoveryRequestPattern}, script-path=${script('recovery-request')}, timeout=60`,
+      '',
+      '[MITM]',
+      'hostname = %APPEND% api.revenuecat.com',
+      ''
+    ].join('\n');
+  }
   return [
     '#!name=Locket Zim',
     '#!desc=v4: existing audio flags, video configuration and filter diagnostics. Device verification required.',
@@ -52,7 +72,9 @@ export async function build(destination = root, suppliedSettings) {
   if (remoteSource.split(marker).length !== 2) throw new Error('Expected exactly one Remote Config marker');
   const compiled = {
     'remote-config': remoteSource.replace(marker, config),
-    revenuecat: await readFile(path.join(root, 'src/revenuecat.js'), 'utf8')
+    revenuecat: await readFile(path.join(root, 'src/revenuecat.js'), 'utf8'),
+    'recovery-response': await readFile(path.join(root, 'recovery/response.js'), 'utf8'),
+    'recovery-request': await readFile(path.join(root, 'recovery/request.js'), 'utf8')
   };
   const files = {}, filenames = {};
   for (const [name, source] of Object.entries(compiled)) {
@@ -63,10 +85,11 @@ export async function build(destination = root, suppliedSettings) {
   }
   // Each changed script gets a new URL so an old cached body cannot satisfy it.
   // Keep previous fingerprinted files for profiles that have not updated yet.
-  files['LocketZim.module'] = makeModule(hostedBase, filenames);
-  files['LocketZim.local.module'] = makeModule();
+  files['LocketZim.module'] = makeModule(hostedBase, filenames, settings.profile);
+  files['LocketZim.local.module'] = makeModule('', {}, settings.profile);
+  files['LocketZim.Recovery.module'] = makeModule(hostedBase, filenames, 'recovery');
   const { version } = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
-  const manifest = { version, videoSeconds: settings.videoSeconds, entrypoints: filenames, files: {} };
+  const manifest = { version, profile: settings.profile, videoSeconds: settings.profile === 'recovery' ? null : settings.videoSeconds, entrypoints: filenames, files: {} };
   for (const [name, content] of Object.entries(files)) {
     const target = path.join(destination, name);
     await mkdir(path.dirname(target), { recursive: true });
@@ -79,5 +102,5 @@ export async function build(destination = root, suppliedSettings) {
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const manifest = await build();
-  console.log(`Built ${Object.keys(manifest.files).length} files for zim1st/locketzim; video target ${manifest.videoSeconds}s.`);
+  console.log(`Built ${Object.keys(manifest.files).length} files for zim1st/locketzim; active profile ${manifest.profile}.`);
 }

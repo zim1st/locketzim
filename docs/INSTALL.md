@@ -1,33 +1,35 @@
-# Cài bộ riêng trên iPhone
+# Khôi phục Gold trên iPhone
 
-1. Giữ cấu hình Shadowrocket đang dùng có giải mã HTTPS và chứng chỉ được tin cậy.
-2. Vào **Kịch bản**, tắt `revenuecat`, `deleteHeader`, `locket_features_request` và `locket_features_response` của bản cũ. Không xóa chứng chỉ.
-3. Mở **Mô-đun / Modules → +** và thêm:
+Module mặc định hiện chỉ chạy hai script Gold nguyên bản. Video, âm thanh và photobooth chưa được xác nhận hoạt động bằng bản khôi phục. Xem [nguồn và giới hạn](../recovery/README.md).
 
-   `https://raw.githubusercontent.com/zim1st/locketzim/main/LocketZim.module`
+## Dùng module từ repo riêng
 
-4. Bật module Locket Zim. Hai file trong `scripts/` được tải từ chính repo của anh, không phải copy mã thủ công nữa. Trong mục URL Script, kiểm tra cả hai link đều tải được.
-5. Bật Shadowrocket. Đóng hẳn và mở lại Locket, thử quay video rồi kiểm tra camera/filter.
+1. Chọn cấu hình nền có giải mã HTTPS và chứng chỉ đã được tin cậy, ưu tiên `Locket_ohb.conf` cũ.
+2. Tắt các module Locket Zim/v4 khác, kể cả module có URL chứa mã commit `78a1ae7…`. Tắt các hook Locket cũ trong cấu hình nền để không chạy trùng với module mới. Giữ nguyên chứng chỉ.
+3. Trong **Mô-đun / Modules → +**, thêm:
 
-Nếu màn hình cấu hình không có mục Mô-đun, trở về danh sách **Cấu hình** để tìm mục Modules; vị trí có thể khác theo phiên bản Shadowrocket.
+   `https://raw.githubusercontent.com/zim1st/locketzim/main/LocketZim.Recovery.module`
 
-## Cài không dùng GitHub để tải mã
+4. Bật **Locket Zim - Khoi phuc Gold**. Module chỉ có hai hook `revenuecat` và `deleteHeader`; kiểm tra hai URL Script đều tải được.
+5. Bật Shadowrocket, đóng hẳn rồi mở lại Locket và kiểm tra Gold.
 
-Tải `LocketZim.local.module` và thư mục `scripts/`, giữ đúng đường dẫn tương đối. Có thể dùng trình sửa script qua biểu tượng **ⓘ** để lưu nội dung JS cục bộ rồi sửa đường dẫn trong từng hook tới file đã lưu. Hai hook request/response của cùng dịch vụ dùng chung một file.
+File `.module` dùng để thêm vào cấu hình có sẵn, không chọn làm cấu hình chính mới: module không chứa chứng chỉ HTTPS riêng.
 
-## Cập nhật
+## Dùng cấu hình đầy đủ đã chuẩn bị riêng
 
-Khi repo có bản mới, cập nhật module trong Shadowrocket. Từ v4, URL script có hash trong tên file; khi mã thay đổi, module trỏ tới URL mới để tránh dùng nhầm JS cũ. Kiểm tra mô tả module có `v4` và URL Script tải thành công. Log có `[Locket Zim] v4` để phân biệt với v3 hoặc `[Locket 30s]` ở các bản cũ.
+Chủ máy có file cục bộ `LocketZim_KhoiPhuc.conf`, được tạo từ cấu hình gốc và giữ nguyên chứng chỉ. Chuyển file sang iPhone, nhập vào **Cấu hình**, chọn nó và tắt các module Locket khác. File này đã có hai hook Gold nên không cần thêm module khôi phục.
 
-Locket cũng có cache riêng của Firebase. Đóng/mở ứng dụng không bảo đảm có lần tải Remote Config mới. Việc bỏ ETag không bỏ được khoảng chờ do ứng dụng đặt. Không cần xóa app để thử bước đầu.
+File chứa chứng chỉ riêng chỉ được giữ cục bộ, không có trên GitHub.
 
-## Kiểm tra
+## Kiểm tra nếu Gold chưa trở lại
 
-- Quay thử, xem trước và kiểm tra thời lượng thật; nếu gửi thử, kiểm tra bên nhận mở đủ video.
-- Xác nhận nút filter xuất hiện, danh sách có mục, rồi kiểm tra ảnh kết quả thực sự được tạo. Đây là ba bước khác nhau.
-- Nếu thiếu nút: bật **Gỡ lỗi** ở `zim_remote_config_response`, lấy các dòng `[Locket Zim] v4 input schema` và `filter diagnostics` cùng số phiên bản Locket.
-- Nếu video không có tiếng dù đã cấp quyền micrô: thử video mới trong Locket và trong ứng dụng Ảnh sau khi lưu, bật loa/âm lượng; lấy thêm dòng `v4 audio input` và `v4 audio output`. Video đã quay thiếu âm thanh không được sửa bằng cấu hình mới.
-- Nếu không có log v4 sau khi mở Locket, chưa có bằng chứng script mới đã xử lý một phản hồi; có thể ứng dụng vẫn dùng cấu hình đã cache. Không kết luận các tham số đã được áp dụng chỉ dựa trên việc tải module thành công.
-- Nếu tạo ảnh báo lỗi: giữ nguyên lỗi đó để chẩn đoán; không đổi lỗi máy chủ thành HTTP 200.
+- Kiểm tra hai script tải thành công và chỉ một bộ Gold đang bật.
+- Kiểm tra giải mã HTTPS và độ tin cậy của chứng chỉ trong cấu hình đang chọn.
+- Bật **Gỡ lỗi** ở hai hook, mở lại Locket và xem lỗi tải/chạy script. Bản gốc không ghi log `v4`; sự vắng mặt của log đó không phải lỗi.
+- Không cần xóa Locket hoặc đăng xuất để thử bước đầu. Chưa có log thiết bị nên chưa kết luận nguyên nhân mất Gold.
 
-Để quay lại bản trước: tắt module Locket Zim rồi bật lại bốn script cũ. Các giá trị Locket đã cache có thể tồn tại đến lần tải và kích hoạt cấu hình mới.
+Nếu muốn thử đúng cấu hình gốc: tắt tất cả module Locket Zim, chọn `Locket_ohb.conf`, chỉ bật `revenuecat` và `deleteHeader` gốc.
+
+## Dùng script cục bộ
+
+Tải `LocketZim.local.module` và thư mục `scripts/`, giữ đúng đường dẫn tương đối. Profile khôi phục dùng hai file riêng `scripts/recovery-response.js` và `scripts/recovery-request.js`.

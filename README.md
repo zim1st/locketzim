@@ -1,12 +1,16 @@
 # Locket Zim
 
+**Đang khôi phục Gold:** người dùng báo mất Gold sau bản thử nghiệm mới. Module mặc định đã quay về đúng hai hook của cấu hình gốc. [Dùng bản khôi phục](https://raw.githubusercontent.com/zim1st/locketzim/main/LocketZim.Recovery.module) trên cấu hình có chứng chỉ HTTPS cũ; tắt các module Locket Zim/v4 khác. Không chọn module làm cấu hình chính. Xem [hướng dẫn khôi phục](recovery/README.md).
+
+`settings.json` hiện đặt `profile: recovery`. Các phần video/filter/audio mô tả bên dưới là mã thử nghiệm được lưu lại, **không chạy trong profile khôi phục**. Chỉ đổi sang `experimental` khi chủ máy yêu cầu thử tiếp sau khi đã khôi phục.
+
 Bộ script Shadowrocket riêng cho [zim1st/locketzim](https://github.com/zim1st/locketzim). Hai script chạy chính được lưu trong repo này; không tải mã từ repo cộng đồng và không gửi ảnh sang Worker bên thứ ba.
 
 **Trạng thái thực tế:** người dùng đã xác nhận quay được **30 giây** với bản trước, nhưng video chưa có tiếng. AI/photobooth **chưa hiện nút và chưa hoạt động**. V4 thử bật các khóa âm thanh đã tồn tại trong cấu hình; chưa kiểm chứng trên iPhone. Bộ này không có bộ chụp/ghép photobooth hay máy chủ xử lý AI riêng.
 
 ## Link cài
 
-[LocketZim.module](https://raw.githubusercontent.com/zim1st/locketzim/main/LocketZim.module)
+[LocketZim.Recovery.module](https://raw.githubusercontent.com/zim1st/locketzim/main/LocketZim.Recovery.module) — link mới để tránh nhầm với bản v4 đã cache. `LocketZim.module` cũng được build thành profile khôi phục.
 
 Trong Shadowrocket, dùng cấu hình đang có chứng chỉ HTTPS hoạt động → **Mô-đun / Modules → +** → dán link trên. Tắt bốn script cũ trong cấu hình: `revenuecat`, `deleteHeader`, `locket_features_request`, `locket_features_response`, để tránh chạy chồng hai bộ. Giữ giải mã HTTPS bật. Xem [hướng dẫn đầy đủ](docs/INSTALL.md).
 

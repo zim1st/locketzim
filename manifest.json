@@ -1,9 +1,12 @@
 {
-  "version": "4.0.0",
-  "videoSeconds": 120,
+  "version": "4.0.1-recovery",
+  "profile": "recovery",
+  "videoSeconds": null,
   "entrypoints": {
     "remote-config": "remote-config-7229b24af28f.js",
-    "revenuecat": "revenuecat-41b89bdaed96.js"
+    "revenuecat": "revenuecat-41b89bdaed96.js",
+    "recovery-response": "recovery-response-c35e146fdba5.js",
+    "recovery-request": "recovery-request-377ef001fedb.js"
   },
   "files": {
     "scripts/remote-config.js": {
@@ -22,13 +25,33 @@
       "bytes": 3571,
       "sha256": "41b89bdaed96b7d81ea0cb4042e6a4347c39f7edf54b29684898cc62fb557995"
     },
+    "scripts/recovery-response.js": {
+      "bytes": 1298,
+      "sha256": "c35e146fdba58b4cc6f27604925a2ac7a8f80f4f9befef165fd662ed142898e2"
+    },
+    "scripts/recovery-response-c35e146fdba5.js": {
+      "bytes": 1298,
+      "sha256": "c35e146fdba58b4cc6f27604925a2ac7a8f80f4f9befef165fd662ed142898e2"
+    },
+    "scripts/recovery-request.js": {
+      "bytes": 354,
+      "sha256": "377ef001fedb875360c5537e367be79188ad79b22b2dbd0980dd8e7dcb04069a"
+    },
+    "scripts/recovery-request-377ef001fedb.js": {
+      "bytes": 354,
+      "sha256": "377ef001fedb875360c5537e367be79188ad79b22b2dbd0980dd8e7dcb04069a"
+    },
     "LocketZim.module": {
-      "bytes": 1440,
-      "sha256": "36d193f58013c06ac918c5e4d491287f7bbf60b470bc83d3331935e8d36489c0"
+      "bytes": 868,
+      "sha256": "74df3f8ea4649a066768c35b98817d8b6186d44bab97533c10b64b726a28a4ba"
     },
     "LocketZim.local.module": {
-      "bytes": 1164,
-      "sha256": "6ab8a78a762b4a6e295c214b1cb703552bfad8515eb027aab915c62c6e8f6c32"
+      "bytes": 730,
+      "sha256": "bc45e174091a0ac0ae60dab081b4177b784b4365baf63306363c30af3bda6d65"
+    },
+    "LocketZim.Recovery.module": {
+      "bytes": 868,
+      "sha256": "74df3f8ea4649a066768c35b98817d8b6186d44bab97533c10b64b726a28a4ba"
     }
   }
 }

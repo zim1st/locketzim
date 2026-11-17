@@ -3,3 +3,5 @@
 *.jpg binary
 # Preserve downloaded source snapshots byte for byte, including original whitespace.
 reference/** -whitespace
+recovery/** -whitespace
+scripts/recovery-* -whitespace

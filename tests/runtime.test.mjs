@@ -4,14 +4,14 @@ import { readFile, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import vm from 'node:vm';
-import { build, root, validateSettings, firebasePattern, revenuecatPattern } from '../tools/build.mjs';
+import { build, root, validateSettings, firebasePattern, revenuecatPattern, recoveryResponsePattern, recoveryRequestPattern } from '../tools/build.mjs';
 import { audit } from '../tools/audit.mjs';
 
 const firebase = 'https://firebaseremoteconfig.googleapis.com/v1/projects/locket-4252a/namespaces/firebase:fetch';
 const revenuecat = 'https://api.revenuecat.com/v1/subscribers/test-user';
 const settings = JSON.parse(await readFile(path.join(root, 'settings.json'), 'utf8'));
 await build();
-const programs = Object.fromEntries(await Promise.all(['remote-config', 'revenuecat'].map(async name => [name, new vm.Script(await readFile(path.join(root, `scripts/${name}.js`), 'utf8'))])));
+const programs = Object.fromEntries(await Promise.all(['remote-config', 'revenuecat', 'recovery-response', 'recovery-request'].map(async name => [name, new vm.Script(await readFile(path.join(root, `scripts/${name}.js`), 'utf8'))])));
 
 function run(name, { url = name === 'remote-config' ? firebase : revenuecat, headers = { 'User-Agent': 'Locket/2.72.1' }, body, status = 200, responseHeaders = {} } = {}) {
   const calls = [], logs = [];
@@ -170,7 +170,7 @@ test('Remote Config transformations are idempotent and normalize stale transport
 test('generated module uses only owner repository scripts and scopes each hook', async () => {
   const source = await readFile(path.join(root, 'LocketZim.module'), 'utf8');
   const links = [...source.matchAll(/script-path=([^,\s]+)/g)].map(match => match[1]);
-  assert.equal(links.length, 4);
+  assert.equal(links.length, settings.profile === 'recovery' ? 2 : 4);
   for (const url of links) {
     assert.ok(url.startsWith('https://raw.githubusercontent.com/zim1st/locketzim/main/scripts/'));
     assert.match(path.basename(url), /-[a-f0-9]{12}\.js$/);
@@ -185,9 +185,9 @@ test('generated module uses only owner repository scripts and scopes each hook',
 test('a changed video setting produces a fresh script URL and retains the previous file', async () => {
   const temporary = await mkdtemp(path.join(tmpdir(), 'locketzim-cache-'));
   try {
-    const first = await build(temporary, { ...settings, videoSeconds: 30 });
+    const first = await build(temporary, { ...settings, profile: 'experimental', videoSeconds: 30 });
     const firstSource = await readFile(path.join(temporary, 'scripts', first.entrypoints['remote-config']), 'utf8');
-    const second = await build(temporary, { ...settings, videoSeconds: 60 });
+    const second = await build(temporary, { ...settings, profile: 'experimental', videoSeconds: 60 });
     assert.notEqual(first.entrypoints['remote-config'], second.entrypoints['remote-config']);
     assert.equal(first.entrypoints.revenuecat, second.entrypoints.revenuecat);
     assert.equal(await readFile(path.join(temporary, 'scripts', first.entrypoints['remote-config']), 'utf8'), firstSource);
@@ -212,4 +212,33 @@ test('build is reproducible and rejects invalid settings', async () => {
 
 test('publication audit checks runtime dependencies and private files', async () => {
   assert.match(await audit(), /Audit passed/);
+});
+
+test('recovery scripts are byte-for-byte copies of the original working profile sources', async () => {
+  for (const [current, original] of [['response', 'Locket_Ohoang7'], ['request', 'deleteHeader']]) {
+    const expected = await readFile(path.join(root, `reference/vuong2023/${original}.js`));
+    assert.deepEqual(await readFile(path.join(root, `recovery/${current}.js`)), expected);
+    assert.deepEqual(await readFile(path.join(root, `scripts/recovery-${current}.js`)), expected);
+  }
+});
+
+test('recovery module restores original rules, hook names, cache behavior and timeouts', async () => {
+  const module = await readFile(path.join(root, 'LocketZim.Recovery.module'), 'utf8');
+  assert.ok(module.includes(`pattern=${recoveryResponsePattern}`));
+  assert.ok(module.includes(`pattern=${recoveryRequestPattern}`));
+  assert.match(module, /requires-body=true, max-size=-1, timeout=60/);
+  assert.match(module, /^revenuecat = type=http-response/m);
+  assert.match(module, /^deleteHeader = type=http-request/m);
+  const activeLines = module.split('\n').filter(line => !line.startsWith('#')).join('\n');
+  assert.equal(/zim_|firebase|remote-config\.js|ca-p12\s*=/i.test(activeLines), false);
+  const request = run('recovery-request', { headers: { 'User-Agent': 'Locket/2.72.1', 'X-RevenueCat-ETag': 'stale', Authorization: 'keep' } });
+  assert.equal(request.output.headers['X-RevenueCat-ETag'], '');
+  assert.equal(request.output.headers.Authorization, 'keep');
+});
+
+test('recovery response matches the original Locket Gold mapping', () => {
+  const result = run('recovery-response', { body: { subscriber: { subscriptions: {}, entitlements: {} } } });
+  assert.equal(result.body.subscriber.entitlements.Gold.product_identifier, 'com.ohoang7.premium.yearly');
+  assert.equal(result.body.subscriber.entitlements.Gold.expires_date, '2099-12-18T01:04:17Z');
+  assert.equal(result.body.subscriber.subscriptions['com.ohoang7.premium.yearly'].store, 'app_store');
 });
