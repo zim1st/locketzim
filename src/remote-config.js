@@ -1,6 +1,6 @@
 /*
- * Locket / Shadowrocket: independent Remote Config build, revision 3.
- * Target: 30-second video and existing camera/filter controls.
+ * Locket / Shadowrocket: independent Remote Config build, revision 4.
+ * Target: configured video duration, existing audio flags and filter diagnostics.
  * Does not implement image generation or grant server-side access.
  * Duration overrides only modify existing keys. Revision 2 also supplies
  * a small set of missing filter UI controls in recognized configurations.
@@ -13,7 +13,13 @@
     var BUILD_CONFIG = /* LOCKETZIM_CONFIG */ {};
     var VIDEO_SECONDS = BUILD_CONFIG.videoSeconds || 120;
     var PREFIX = "[Locket Zim] ";
-    var REVISION = "v3";
+    var REVISION = "v4";
+    // Only edit these flags when the server actually supplies them. These names
+    // come from the archived community schema, not a public Locket guarantee.
+    var AUDIO_KEYS = [
+        "video_sound_enabled", "video_audio_enabled", "microphone_enabled",
+        "camera_microphone_enabled", "audio_enabled", "sound_enabled", "record_audio_enabled"
+    ];
 
     function log(message) {
         if (typeof console !== "undefined" && typeof console.log === "function") {
@@ -67,6 +73,7 @@
         log(REVISION + " input schema: " +
             catalogSummary("camera_filter_config", beforeFilters) + "; " +
             catalogSummary("celebrity_filter_config.cameraFilterConfig", beforeCelebrity && beforeCelebrity.cameraFilterConfig));
+        log(REVISION + " audio input: " + audioSummary(entries));
 
         function updateExisting(object, keys, value, path) {
             keys.forEach(function (key) {
@@ -123,6 +130,7 @@
         ["camera", "camera_roll"].forEach(function (key) {
             editObjectEntry(key, function (settings, path) {
                 updateExisting(settings, durationKeys, VIDEO_SECONDS, path);
+                updateExisting(settings, AUDIO_KEYS, true, path);
                 if (isObject(settings.trimmer)) {
                     updateExisting(settings.trimmer, durationKeys, VIDEO_SECONDS, path + "trimmer.");
                 }
@@ -136,6 +144,7 @@
             "max_recording_duration", "recording_max_duration", "gold_max_duration",
             "camera_roll_video_max_duration_sec", "video_max_duration_sec"
         ], VIDEO_SECONDS, "");
+        updateExisting(entries, AUDIO_KEYS.concat(["camera_roll_video_sound_enabled"]), true, "");
 
         editObjectEntry("feature_gates", function (gates, path) {
             updateExisting(gates, [
@@ -234,12 +243,33 @@
             });
             return key + "=" + (counts.length ? counts.join("/") : "no-catalog-arrays");
         }
+
+        function audioSummary(allEntries) {
+            function summarize(label, settings, keys) {
+                if (!settings) return label + "=missing-or-invalid";
+                var present = 0, enabled = 0, disabled = 0, unknown = 0;
+                keys.forEach(function (key) {
+                    if (!has(settings, key)) return;
+                    present += 1;
+                    if (settings[key] === true || settings[key] === "true") enabled += 1;
+                    else if (settings[key] === false || settings[key] === "false") disabled += 1;
+                    else unknown += 1;
+                });
+                return label + "=(present:" + present + ",enabled:" + enabled + ",disabled:" + disabled + ",unknown:" + unknown + ")";
+            }
+            return [
+                summarize("top", allEntries, AUDIO_KEYS.concat(["camera_roll_video_sound_enabled"])),
+                summarize("camera", objectValue(allEntries.camera), AUDIO_KEYS),
+                summarize("camera_roll", objectValue(allEntries.camera_roll), AUDIO_KEYS)
+            ].join("; ");
+        }
         var cameraFilters = objectValue(entries.camera_filter_config);
         var celebrityFilters = objectValue(entries.celebrity_filter_config);
         log(REVISION + " filter diagnostics: " +
             catalogSummary("camera_filter_config", cameraFilters) + "; " +
             catalogSummary("celebrity_filter_config.cameraFilterConfig", celebrityFilters && celebrityFilters.cameraFilterConfig) +
             ". UI flags do not verify AI processing. No image URLs or account data logged.");
+        log(REVISION + " audio output: " + audioSummary(entries) + ". Test a newly recorded clip; flags do not prove an audio track exists.");
 
         if (changes.length === 0) {
             log("No changes: supported settings are absent or already enabled. Device verification is still required.");

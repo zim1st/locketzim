@@ -1,22 +1,34 @@
 {
-  "version": "3.0.0",
+  "version": "4.0.0",
   "videoSeconds": 120,
+  "entrypoints": {
+    "remote-config": "remote-config-7229b24af28f.js",
+    "revenuecat": "revenuecat-41b89bdaed96.js"
+  },
   "files": {
     "scripts/remote-config.js": {
-      "bytes": 12411,
-      "sha256": "13d203d5aaddaed34a5a4728b8660860a3ca5b972f9ce17d7ac3e3628bb3cb93"
+      "bytes": 14266,
+      "sha256": "7229b24af28f6d7c43f99006d6ea1e03ca2e0389ab7b7df13edc043d762769c2"
+    },
+    "scripts/remote-config-7229b24af28f.js": {
+      "bytes": 14266,
+      "sha256": "7229b24af28f6d7c43f99006d6ea1e03ca2e0389ab7b7df13edc043d762769c2"
     },
     "scripts/revenuecat.js": {
       "bytes": 3571,
       "sha256": "41b89bdaed96b7d81ea0cb4042e6a4347c39f7edf54b29684898cc62fb557995"
     },
+    "scripts/revenuecat-41b89bdaed96.js": {
+      "bytes": 3571,
+      "sha256": "41b89bdaed96b7d81ea0cb4042e6a4347c39f7edf54b29684898cc62fb557995"
+    },
     "LocketZim.module": {
-      "bytes": 1380,
-      "sha256": "0fb9a5521c2a3868364639540047e9f2e490c0c800686dfbc89bb348e69cab2b"
+      "bytes": 1440,
+      "sha256": "36d193f58013c06ac918c5e4d491287f7bbf60b470bc83d3331935e8d36489c0"
     },
     "LocketZim.local.module": {
-      "bytes": 1156,
-      "sha256": "a80c5206db48524e5382c2a25c111432e108b8b64c98777137f0fa13f007fe60"
+      "bytes": 1164,
+      "sha256": "6ab8a78a762b4a6e295c214b1cb703552bfad8515eb027aab915c62c6e8f6c32"
     }
   }
 }

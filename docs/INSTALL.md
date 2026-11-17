@@ -17,7 +17,7 @@ Tải `LocketZim.local.module` và thư mục `scripts/`, giữ đúng đường
 
 ## Cập nhật
 
-Khi repo có bản mới, cập nhật module và tải lại hai URL script trong Shadowrocket. Chỉ cập nhật module có thể chưa xóa bản JS đã cache. Log Remote Config v3 bắt đầu bằng `[Locket Zim]` để phân biệt với `[Locket 30s]` ở bản cũ.
+Khi repo có bản mới, cập nhật module trong Shadowrocket. Từ v4, URL script có hash trong tên file; khi mã thay đổi, module trỏ tới URL mới để tránh dùng nhầm JS cũ. Kiểm tra mô tả module có `v4` và URL Script tải thành công. Log có `[Locket Zim] v4` để phân biệt với v3 hoặc `[Locket 30s]` ở các bản cũ.
 
 Locket cũng có cache riêng của Firebase. Đóng/mở ứng dụng không bảo đảm có lần tải Remote Config mới. Việc bỏ ETag không bỏ được khoảng chờ do ứng dụng đặt. Không cần xóa app để thử bước đầu.
 
@@ -25,7 +25,9 @@ Locket cũng có cache riêng của Firebase. Đóng/mở ứng dụng không b�
 
 - Quay thử, xem trước và kiểm tra thời lượng thật; nếu gửi thử, kiểm tra bên nhận mở đủ video.
 - Xác nhận nút filter xuất hiện, danh sách có mục, rồi kiểm tra ảnh kết quả thực sự được tạo. Đây là ba bước khác nhau.
-- Nếu thiếu nút: bật **Gỡ lỗi** ở `zim_remote_config_response`, lấy các dòng `[Locket Zim] v3 input schema` và `filter diagnostics` cùng số phiên bản Locket.
+- Nếu thiếu nút: bật **Gỡ lỗi** ở `zim_remote_config_response`, lấy các dòng `[Locket Zim] v4 input schema` và `filter diagnostics` cùng số phiên bản Locket.
+- Nếu video không có tiếng dù đã cấp quyền micrô: thử video mới trong Locket và trong ứng dụng Ảnh sau khi lưu, bật loa/âm lượng; lấy thêm dòng `v4 audio input` và `v4 audio output`. Video đã quay thiếu âm thanh không được sửa bằng cấu hình mới.
+- Nếu không có log v4 sau khi mở Locket, chưa có bằng chứng script mới đã xử lý một phản hồi; có thể ứng dụng vẫn dùng cấu hình đã cache. Không kết luận các tham số đã được áp dụng chỉ dựa trên việc tải module thành công.
 - Nếu tạo ảnh báo lỗi: giữ nguyên lỗi đó để chẩn đoán; không đổi lỗi máy chủ thành HTTP 200.
 
 Để quay lại bản trước: tắt module Locket Zim rồi bật lại bốn script cũ. Các giá trị Locket đã cache có thể tồn tại đến lần tải và kích hoạt cấu hình mới.

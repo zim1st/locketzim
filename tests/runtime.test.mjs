@@ -41,6 +41,47 @@ test('video target is generated from settings and preserves unrelated camera opt
   assert.equal(result.body.templateVersion, 'keep-version');
 });
 
+test('v4 enables existing audio flags without changing audio session controls or duration rules', () => {
+  const result = run('remote-config', { body: { entries: {
+    camera: JSON.stringify({ gold_max_duration: 5, audio_enabled: false, microphone_enabled: 'false', future: 'keep' }),
+    camera_roll: JSON.stringify({ video_sound_enabled: false, audio_enabled: false, max_duration: 5 }),
+    video_audio_enabled: 'false',
+    camera_roll_video_sound_enabled: 'false',
+    audio_session_deactivation_enabled: 'false'
+  } } });
+  const camera = JSON.parse(result.body.entries.camera);
+  const cameraRoll = JSON.parse(result.body.entries.camera_roll);
+  assert.equal(camera.audio_enabled, true);
+  assert.equal(camera.microphone_enabled, 'true');
+  assert.equal(camera.gold_max_duration, settings.videoSeconds);
+  assert.equal(camera.future, 'keep');
+  assert.equal(cameraRoll.video_sound_enabled, true);
+  assert.equal(cameraRoll.audio_enabled, true);
+  assert.equal(result.body.entries.video_audio_enabled, 'true');
+  assert.equal(result.body.entries.camera_roll_video_sound_enabled, 'true');
+  assert.equal(result.body.entries.audio_session_deactivation_enabled, 'false');
+  assert.ok(result.logs.some(line => line.includes('v4 audio input:') && line.includes('disabled:2')));
+  assert.ok(result.logs.some(line => line.includes('v4 audio output:') && line.includes('enabled:2,disabled:0')));
+});
+
+test('v4 reports absent audio settings without fabricating them', () => {
+  const result = run('remote-config', { body: { entries: { camera: '{"gold_max_duration":5}' } } });
+  assert.equal('audio_enabled' in JSON.parse(result.body.entries.camera), false);
+  assert.equal('video_audio_enabled' in result.body.entries, false);
+  assert.ok(result.logs.some(line => line.includes('v4 audio input:') && line.includes('present:0,enabled:0,disabled:0')));
+});
+
+test('v4 keeps unsupported audio values and does not log their contents', () => {
+  const result = run('remote-config', { body: { entries: {
+    camera: JSON.stringify({ gold_max_duration: 5, audio_enabled: { private: 'private-data' }, sound_enabled: null }),
+    microphone_enabled: 'private-mode'
+  } } });
+  assert.deepEqual(JSON.parse(result.body.entries.camera).audio_enabled, { private: 'private-data' });
+  assert.equal(JSON.parse(result.body.entries.camera).sound_enabled, null);
+  assert.equal(result.body.entries.microphone_enabled, 'private-mode');
+  assert.equal(result.logs.join('\n').includes('private-'), false);
+});
+
 test('missing UI controls are supplied without inventing a filter catalog', () => {
   const result = run('remote-config', { body: { entries: { camera: '{"gold_max_duration":30}' } } });
   const config = JSON.parse(result.body.entries.camera_filter_config);
@@ -132,12 +173,28 @@ test('generated module uses only owner repository scripts and scopes each hook',
   assert.equal(links.length, 4);
   for (const url of links) {
     assert.ok(url.startsWith('https://raw.githubusercontent.com/zim1st/locketzim/main/scripts/'));
+    assert.match(path.basename(url), /-[a-f0-9]{12}\.js$/);
     await readFile(path.join(root, 'scripts', path.basename(url)));
   }
   assert.equal(new RegExp(firebasePattern).test(firebase + '?key=example'), true);
   assert.equal(new RegExp(revenuecatPattern).test(revenuecat + '?example=1'), true);
   assert.equal(/ca-p12|ca-passphrase/.test(source), false);
   assert.equal(/api\.locketcamera\.com|workers\.dev/.test(source), false);
+});
+
+test('a changed video setting produces a fresh script URL and retains the previous file', async () => {
+  const temporary = await mkdtemp(path.join(tmpdir(), 'locketzim-cache-'));
+  try {
+    const first = await build(temporary, { ...settings, videoSeconds: 30 });
+    const firstSource = await readFile(path.join(temporary, 'scripts', first.entrypoints['remote-config']), 'utf8');
+    const second = await build(temporary, { ...settings, videoSeconds: 60 });
+    assert.notEqual(first.entrypoints['remote-config'], second.entrypoints['remote-config']);
+    assert.equal(first.entrypoints.revenuecat, second.entrypoints.revenuecat);
+    assert.equal(await readFile(path.join(temporary, 'scripts', first.entrypoints['remote-config']), 'utf8'), firstSource);
+    const module = await readFile(path.join(temporary, 'LocketZim.module'), 'utf8');
+    assert.ok(module.includes(second.entrypoints['remote-config']));
+    assert.equal(module.includes(first.entrypoints['remote-config']), false);
+  } finally { await rm(temporary, { recursive: true, force: true }); }
 });
 
 test('build is reproducible and rejects invalid settings', async () => {

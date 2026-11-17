@@ -5,6 +5,7 @@
 - Người dùng xác nhận quay 30 giây hoạt động với bản v1.
 - Người dùng xác nhận v1/v2 đều chưa thấy nút AI/photobooth.
 - V1 chỉ sửa các khóa UI có sẵn; v2 thêm một nhóm khóa UI từ mã cộng đồng khi thiếu. V3 giữ hành vi đó và ghi thêm hình dạng cấu hình **trước khi sửa**.
+- V4 bổ sung xử lý khóa âm thanh có sẵn và URL script theo nội dung để tránh dùng nhầm bản JS cache. Không bổ sung bộ chụp/ghép photobooth; mục tiêu vẫn là tích hợp trong ứng dụng qua Shadowrocket, xem [giới hạn kỹ thuật](NATIVE-LIMITS.md).
 - Chưa có phiên bản Locket hoặc log cấu hình từ thiết bị. Vì vậy chưa xác định được nguyên nhân cụ thể của việc ẩn nút.
 - Hai script Gold gốc và script Remote Config tham khảo trả HTTP 200 khi tải ngày 17/11/2026. Link nguồn còn tải được không có nghĩa là backend AI còn dùng được hoặc cấp quyền cho mọi tài khoản.
 

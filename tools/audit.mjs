@@ -22,7 +22,7 @@ export async function audit(directory = root) {
       }
       if (entry.name === 'LocketZim.module') {
         for (const match of source.matchAll(/script-path=([^,\s]+)/g)) {
-          if (!/^https:\/\/raw\.githubusercontent\.com\/zim1st\/locketzim\/[^/]+\/scripts\/[a-z-]+\.js$/.test(match[1])) issues.push(`Unexpected runtime script URL: ${match[1]}`);
+          if (!/^https:\/\/raw\.githubusercontent\.com\/zim1st\/locketzim\/[^/]+\/scripts\/[a-z0-9-]+\.js$/.test(match[1])) issues.push(`Unexpected runtime script URL: ${match[1]}`);
         }
       }
     }
