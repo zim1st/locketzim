@@ -48,6 +48,8 @@ Bản nguồn `locket_photobooth.js` có chuyển yêu cầu sang Worker riêng,
 
 Để xử lý tiếp, cần phiên bản Locket và các dòng log `[Locket Zim] v3 input schema` / `filter diagnostics` sau một lần Locket tải Remote Config mới. Log chỉ có tên nhóm cấu hình và số phần tử, không có token, ảnh hoặc tài khoản. Xem [phân tích AI/photobooth](docs/AI-PHOTOBOOTH.md).
 
+Đã nghiên cứu thêm website anh cung cấp: [cơ chế photobooth, đăng nhập và AI của locket.elingo.app](docs/ELINGO-RESEARCH.md). Website có giao diện và backend riêng; mã công khai phía trình duyệt không chứa toàn bộ dịch vụ AI.
+
 ## Dữ liệu riêng
 
 Repo không chứa chứng chỉ CA hay mật khẩu trong file `.conf` gốc. Giữ chứng chỉ trên iPhone, không tải file cấu hình gốc có chứng chỉ lên GitHub. Bộ script vẫn phụ thuộc các dịch vụ chính thức của Locket, Firebase và RevenueCat; GitHub chỉ cung cấp file script.
